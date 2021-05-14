@@ -1,4 +1,5 @@
 import flask
+from flask.globals import request
 import qrcode
 from io import BytesIO
 from flask_cors import CORS
@@ -18,10 +19,18 @@ def generate_qr(data):
     return img
 
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def get_qr():
+    data = None
+
+    if request.method=="GET":
+        data = "Hello World!"
+    else :
+        data = request.json['data']
+    if not data:
+        data = "No data given!"
     img_buf = BytesIO()
-    img = generate_qr('www.python.org')
+    img = generate_qr(data)
     img.save(img_buf)
     img_buf.seek(0)
     return flask.send_file(img_buf, mimetype='image/png')

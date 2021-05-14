@@ -2,24 +2,32 @@
 <html>
     <head>
         <title>QR Generator</title>
+        <link rel="stylesheet" href="style.css" />
     </head>
 
     <body>
         <div class="main">
-            <form method="POST" onsubmit="getImage(); return false;">
+            <form method="POST" onsubmit="getImage(); return false;" name="data">
                 <label for="data">Enter data here :</label><br>
-                <textarea name="data">
-                </textarea><br>
+                <textarea name="data" rows="10" cols="50"></textarea><br>
                 <input type="submit" value="Generate QR" />
             </form>
-            <img id="my-img" src="https://thumbs.dreamstime.com/b/no-image-available-icon-photo-camera-flat-vector-illustration-132483141.jpg" />
+            <img id="my-img" src="https://thumbs.dreamstime.com/b/no-image-available-icon-photo-camera-flat-vector-illustration-132483141.jpg" height="400px" width="400px"/>
         </div>
     </body>
 
     <script>
         async function getImage() {
             event.preventDefault();
-            let b = await fetch("http://localhost:5000");
+            let a = document.forms['data'][0].value;
+            let b = await fetch("http://localhost:5000", {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                method: "POST",
+                body: JSON.stringify({data: a})
+            });
             let c = b.body;
             let d = await c.getReader().read();
             let e = d.value;
