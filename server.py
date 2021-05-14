@@ -1,8 +1,10 @@
 import flask
 import qrcode
-from io import StringIO, BytesIO
+from io import BytesIO
+from flask_cors import CORS
 
 app = flask.Flask(__name__)
+CORS(app)
 
 def generate_qr(data):
     qr = qrcode.QRCode(version=1,
@@ -16,7 +18,7 @@ def generate_qr(data):
     return img
 
 
-@app.get('/')
+@app.route('/')
 def get_qr():
     img_buf = BytesIO()
     img = generate_qr('www.python.org')

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>QR Generator</title>
+    </head>
+
+    <body>
+        <div class="main">
+            <form method="POST" onsubmit="getImage(); return false;">
+                <label for="data">Enter data here :</label><br>
+                <textarea name="data">
+                </textarea><br>
+                <input type="submit" value="Generate QR" />
+            </form>
+            <img id="my-img" src="https://thumbs.dreamstime.com/b/no-image-available-icon-photo-camera-flat-vector-illustration-132483141.jpg" />
+        </div>
+    </body>
+
+    <script>
+        async function getImage() {
+            event.preventDefault();
+            let b = await fetch("http://localhost:5000");
+            let c = b.body;
+            let d = await c.getReader().read();
+            let e = d.value;
+
+            document.getElementById('my-img').src = URL.createObjectURL(
+                    new Blob([e.buffer], { type: 'image/png' })
+            );
+        }
+    </script>
+</html>
